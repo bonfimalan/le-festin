@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -18,7 +19,7 @@ public class MainController implements Initializable {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     stations = new Circle[14];
-    ObservableList children = anchorPane.getChildren();
+    ObservableList<Node> children = anchorPane.getChildren();
     int i = 0;
     for(Object o : children){
       if (o instanceof Circle){
