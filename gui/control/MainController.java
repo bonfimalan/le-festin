@@ -3,18 +3,22 @@ package gui.control;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import astar.AStar;
 import gui.components.ANode;
 import gui.components.NodeContainer;
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 
 public class MainController implements Initializable {
   @FXML private AnchorPane anchorPane;
@@ -27,6 +31,8 @@ public class MainController implements Initializable {
   private boolean isStarted = false;
 
   private Circle[] stations;
+
+  private AStar aStar;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -42,62 +48,16 @@ public class MainController implements Initializable {
         addOnStationMouseEvents(stations[i], i);
         i++;
       }
-    }    
-
-    
-
-    new Thread(() -> {
-        try {
-          Thread.sleep(100);
-          addLine();
-          Thread.sleep(100);
-          addNodeToLine(1);
-          Thread.sleep(100);
-          addNodeToLine(2);
-          Thread.sleep(100);
-          addNodeToLine(3);
-          Thread.sleep(100);
-          addLine();
-          Thread.sleep(100);
-          addNodeToLine(1);
-          Thread.sleep(100);
-          addNodeToLine(2);
-          Thread.sleep(100);
-          addNodeToLine(3);
-          Thread.sleep(100);
-          choseStationAndAddLine(3);
-          Thread.sleep(100);
-          addNodeToLine(1);
-          Thread.sleep(100);
-          addNodeToLine(2);
-          Thread.sleep(100);
-          addNodeToLine(3);
-          Thread.sleep(100);
-          addLine();
-          Thread.sleep(100);
-          addNodeToLine(1);
-          Thread.sleep(100);
-          addNodeToLine(2);
-          Thread.sleep(100);
-          addNodeToLine(3);
-        } catch (InterruptedException e) { }
-    }).start();
-    
-
-    /*new Thread(() -> {
-      for (Circle c : stations) {
-        try {
-          Thread.sleep(500);
-          c.setFill(Paint.valueOf("ffffff"));
-        } catch (InterruptedException e) { }
-      }
-    }).start();*/
+    }
   }
 
-  public void algFinished() {
+  public void reset() {
     isStarted = false;
     startIndex = -1;
-
+    for (Circle circle : stations) {
+      circle.setFill(Paint.valueOf("#1e90ff"));
+    }
+    vBox.getChildren().clear();
   }
 
   public void addOnStationMouseEvents(Circle station, int index) {
@@ -113,9 +73,9 @@ public class MainController implements Initializable {
         goalIndex = index;
         station.setFill(Paint.valueOf("fc0707"));
         isStarted = true;
-        // starts the alg now
-      }          
-      System.out.println(startIndex + "    " + goalIndex);
+        aStar = new AStar(startIndex, goalIndex, this);
+        aStar.start();
+      }
     });
 
     station.setOnMouseEntered(event -> {
@@ -123,27 +83,47 @@ public class MainController implements Initializable {
     });
   }
 
-  public void visitNode(int index) {
-    stations[index].setFill(Paint.valueOf("fc0707"));
+  public void showSolution(String path, String pathCost) {
+    VBox container = new VBox(
+      new Label(path),
+      new Label(pathCost)
+    );
+    container.setSpacing(10);
+    container.setAlignment(Pos.CENTER);
+
+    Scene scene = new Scene(container);
+    Stage stage = new Stage();
+    stage.setScene(scene);
+    stage.setOnCloseRequest( event -> 
+      this.reset()
+    );
+    stage.setWidth(300);
+    stage.setHeight(200);
+    stage.show();
   }
 
-  public void choseStationAndAddLine(int stationNumber){
-    Platform.runLater(() -> actualLine.choseStation(stationNumber));
-    addLine();
+  public void visitNode(int index) {
+    stations[index].setFill(Paint.valueOf("25a501"));
+  }
+
+  public void backTrackColoring(int index) {
+    stations[index].setFill(Paint.valueOf("c039e5"));
+  }
+
+  public void choseStation(int index, String color){
+    actualLine.choseStation(index + 1, color);
   }
 
   public void addLine() {
-    Platform.runLater(() ->{
-      //System.out.println("a");
-      actualLine = new NodeContainer();
-      vBox.getChildren().addAll(actualLine);
-    });
+    actualLine = new NodeContainer();
+    vBox.getChildren().addAll(actualLine);
   }
 
   public void addNodeToLine(int index) {
-    Platform.runLater(() -> {
-      //System.out.println("b");
-      actualLine.getChildren().addAll(new ANode(index));
-    });
+    actualLine.getChildren().addAll(new ANode(index + 1));
+  }
+
+  public VBox getVBox() {
+    return this.vBox;
   }
 }

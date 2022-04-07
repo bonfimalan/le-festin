@@ -11,13 +11,13 @@ public class NodeContainer extends HBox {
     super.setSpacing(5);
   }
 
-  public void choseStation(int stationNumber) {
+  public void choseStation(int stationNumber, String color) {
     ObservableList<Node> stations = super.getChildren();
     ANode station;
     for (Node node : stations) {
       station = (ANode) node;
       if (station.getText().getText().equals("E" + stationNumber))
-        station.getCircle().setFill(Paint.valueOf("fca6a9"));
+        station.getCircle().setFill(Paint.valueOf(color));
     }
   }
 }

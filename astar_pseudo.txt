@@ -1,0 +1,22 @@
+Explorar x (no de inicio), sendo x um inteiro relacionado com o index da matriz:
+
+criar NodeChild passando null no argumento de pai e x no index
+
+repita ate encontrar x == node de destino:
+  pegar a linha relativa a x e passar para um vetor;
+  criar lista de nos vazia;
+  para toda posição com valor diferente de 0 no vetor faca:
+    criar no filho passando a posição como index e x como pai desse no;
+    adicionar no em uma lista;
+  fim para
+  x := o no com menor pathCostWithH na lista;
+  destruir a lista;
+fim repita
+
+retornar funcao solucao
+
+
+
+FUNCAO SOLUCAO:
+apos achar o no objetivo, percorrer todos os nos pai ate achar o raiz, que tera seu pai igual a null
+      

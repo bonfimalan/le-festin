@@ -1,3 +1,4 @@
+import astar.AStar;
 import gui.control.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +20,7 @@ public class Main extends Application {
     Scene scene = new Scene(parent);
     primaryStage.getIcons().add(new Image("/resources/icon.png"));
     primaryStage.setScene(scene);
+    primaryStage.setTitle("Le Festin");
     primaryStage.show();
   }
 }
