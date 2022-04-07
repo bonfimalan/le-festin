@@ -27,9 +27,11 @@ public class AStar extends Thread {
       Problem.goalIndex = goalIndex;
       ChildNode bestNode = new ChildNode(startIndex, null);
       int [] expanded = new int[14];
-
+      
+      // GUI stuff ------------------------------------
       Thread.sleep(SPEED);
       addLineAndNode(bestNode);
+      // ----------------------------------------------
 
       while(bestNode.getThisIndex() != goalIndex) {
         Thread.sleep(SPEED);
@@ -45,6 +47,7 @@ public class AStar extends Thread {
           if(cost != 0 && expanded[index] == 0) {
             ChildNode newNode = new ChildNode(index, bestNode);
             list.add(newNode);
+            // GUI stuff ------------------------------------
             Thread.sleep(SPEED2);
             Platform.runLater(() ->
               controller.addNodeToLine(newNode.getThisIndex())
@@ -58,6 +61,7 @@ public class AStar extends Thread {
         }
         // entered in back tracking
         else {
+          // GUI stuff ------------------------------------
           final ChildNode NODE = bestNode;
           Platform.runLater(() -> {
             controller.backTrackColoring(NODE.getThisIndex());
@@ -65,11 +69,13 @@ public class AStar extends Thread {
             NodeContainer container = (NodeContainer) vBoxChildren.get(vBoxChildren.size() -2);
             container.choseStation(NODE.getThisIndex() + 1, "c039e5");
           });
+          // ----------------------------------------------
           bestNode = bestNode.getFather();
         }
         System.out.println(bestNode.getThisIndex());
       }
       System.out.println(solution(bestNode));
+      // GUI stuff ------------------------------------
       final ChildNode NODE = bestNode;
       Platform.runLater(() -> 
         controller.showSolution(
@@ -77,6 +83,7 @@ public class AStar extends Thread {
           "Cost: " + NODE.getPathCost() + "s"
         )
       );
+      // ----------------------------------------------
     } catch (Exception e) { }
   }
 

@@ -5,12 +5,19 @@ criar NodeChild passando null no argumento de pai e x no index
 repita ate encontrar x == node de destino:
   pegar a linha relativa a x e passar para um vetor;
   criar lista de nos vazia;
+  criar vetor com 14 posiçoes todas iniciadas com 0
   para toda posição com valor diferente de 0 no vetor faca:
-    criar no filho passando a posição como index e x como pai desse no;
-    adicionar no em uma lista;
+    se o valor na posicao do index for igual a 0 entao:
+      criar no filho passando a posição como index e x como pai desse no;
+      adicionar no em uma lista;
+    fim se
   fim para
-  x := o no com menor pathCostWithH na lista;
-  destruir a lista;
+  se a lista nao estive vazia:
+    x := o no com menor pathCostWithH na lista;
+    destruir a lista;
+  fim se senao:
+    x := recebe seu pai
+  fim senao
 fim repita
 
 retornar funcao solucao

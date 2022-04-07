@@ -26,7 +26,7 @@ public class ChildNode {
   }
 
   private int calculatePathCostWithH() {
-    return pathCost + Problem.distanceh[thisIndex][Problem.goalIndex] * 30;
+    return pathCost + Problem.distanceh[thisIndex][Problem.goalIndex] * Problem.SECOND_PER_KM;
   }
 
   public int getThisIndex() {

@@ -2,12 +2,26 @@ package astar;
 
 public abstract class Problem {
   public static int goalIndex;
+  public static int actualLine = -1;
+  public static final int SECOND_PER_KM = 120;
 
   public static int passCost(int startIndex, int destinyIndex) {
+    if(goalIndex == destinyIndex)
+      return distanceg[startIndex][destinyIndex] * SECOND_PER_KM;
+    if(actualLine == -1) {
+      actualLine = trainLinecolors[startIndex][destinyIndex];
+      return distanceg[startIndex][destinyIndex] * SECOND_PER_KM;
+    }
+    int nextLine = trainLinecolors[startIndex][destinyIndex];
+    int additionTime = actualLine == nextLine ? 0 : 240;
+    actualLine = nextLine;
+    return distanceg[startIndex][destinyIndex] * SECOND_PER_KM + additionTime;
+    /*
     int startTrainLine = trainLinecolors[startIndex][destinyIndex];
     int goalTrainLine = trainLinecolors[destinyIndex][startIndex];
-    int additionTime = startTrainLine == goalTrainLine ? 240 : 0;
+    int additionTime = startTrainLine == goalTrainLine ? 0 : 240;
     return distanceg[startIndex][destinyIndex] * 30 + additionTime;
+    */
   }
 
   public static int[][] distanceg = {
